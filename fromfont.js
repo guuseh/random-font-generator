@@ -38,9 +38,6 @@ for (let i=0; i<font.glyphs.length; i++){
 
 
 
-
-
-
     // alter the path data
 
     console.log(path)
