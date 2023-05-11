@@ -31,23 +31,31 @@ let pathArray = []
 
 for (let i=0; i<font.glyphs.length; i++){
     glyph = font.glyphs.get(i);
-    const path = glyph.toSVG()
+    console.log(glyph.name)
+    const path = glyph.toPathData()
+
+    console.log(path)
 
 // convert to a readable path
 
-
-
+console.log(letters)
 
     // alter the path data
 
-    console.log(path)
+    // console.log(path)
 
 
     // convert it back to the glyph
 
+    var newGlyph = new opentype.Glyph({
+        name: "random",
+        unicode: 66,
+        advanceWidth: 100,
+        path: path
+    });
 
 
-    const ctx = createGlyphCanvas(glyph, 150);
+    const ctx = createGlyphCanvas(newGlyph, 150);
     const x = 50;
     const y = 120;
     const fontSize = 72;
