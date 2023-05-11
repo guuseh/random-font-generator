@@ -7,6 +7,19 @@ let weight;
 let val;
 var font;
 
+// Create a canvas and adds it to the document.
+// Returns the 2d drawing context.
+function createGlyphCanvas(glyph, size) {
+    const canvasId = 'c' + glyph.index;
+    const html = '<div class="wrapper" style="width:' + size + 'px"><canvas id="' + canvasId + '" width="' + size + '" height="' + size + '"></canvas><span>' + glyph.index + '</span><span>' + glyph.name + '</span><span>U ' + glyph.unicode + '</span></div>';
+    const glyphsDiv = document.getElementById('glyphs');
+    const wrap = document.createElement('div');
+    wrap.innerHTML = html;
+    glyphsDiv.appendChild(wrap);
+    const canvas = document.getElementById(canvasId);
+    return canvas.getContext('2d');
+}
+
 var letters = "abcdefghijklmnopqrstuwxyz"
 
 const buf = await fetch('assets/Milkman.woff');
@@ -14,12 +27,40 @@ console.log(buf)
 
 font = opentype.parse(await buf.arrayBuffer())
 
-
+let pathArray = []
 
 for (let i=0; i<font.glyphs.length; i++){
     glyph = font.glyphs.get(i);
-    console.log(glyph)
+    const path = glyph.toSVG()
+
+// convert to a readable path
+
+
+
+
+
+
+
+    // alter the path data
+
+    console.log(path)
+
+
+    // convert it back to the glyph
+
+
+
+    const ctx = createGlyphCanvas(glyph, 150);
+    const x = 50;
+    const y = 120;
+    const fontSize = 72;
+    glyph.draw(ctx, x, y, fontSize);
+    glyph.drawPoints(ctx, x, y, fontSize);
+    glyph.drawMetrics(ctx, x, y, fontSize);
+
 }
+
+
 
 // function setup(){
 //     createCanvas();
