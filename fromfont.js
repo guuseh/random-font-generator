@@ -29,12 +29,56 @@ font = opentype.parse(await buf.arrayBuffer())
 
 let pathArray = []
 
-for (let i=0; i<font.glyphs.length; i++){
-    glyph = font.glyphs.get(i);
+for (let j=4; j<6; j++){
+    glyph = font.glyphs.get(j);
     console.log(glyph.name)
+    const svgData = glyph.toSVG()
+    console.log(svgData)
     const path = glyph.toPathData()
 
-    console.log(path)
+    console.log("original",path)
+
+    let subStringArr = []
+    let tempStr =''
+
+    for (let i = 0; i < path.length; i++) {
+
+
+        
+
+        if(path[i] === 'C' || path[i] === 'M' || path[i] === 'L' || path[i] === 'Q' || path[i] === '-' ||  path[i] === ' '){
+
+            
+            if(tempStr.length > 0){
+
+                console.log('here')
+
+                subStringArr += Math.floor(Math.random() * 200) - 100 + parseInt(tempStr)
+            }
+            subStringArr += path[i] 
+
+
+            tempStr = ''
+        }else if (path[i] === 'Z'){
+            subStringArr += tempStr
+            subStringArr += path[i] 
+
+            
+            
+
+            // return the whole thing later
+        } else {
+            
+        
+            tempStr += path[i]
+
+        }
+        
+    }
+
+    console.log("modified", subStringArr)
+
+    const newPath = opentype.Path.fromSVG(subStringArr)
 
 // convert to a readable path
 
@@ -48,20 +92,26 @@ console.log(letters)
     // convert it back to the glyph
 
     var newGlyph = new opentype.Glyph({
-        name: "random",
-        unicode: 66,
+        name: "random" + Math.random(),
+        unicode: 66 + j,
         advanceWidth: 100,
-        path: path
+        path: newPath
     });
+
+    
 
 
     const ctx = createGlyphCanvas(newGlyph, 150);
     const x = 50;
     const y = 120;
     const fontSize = 72;
-    glyph.draw(ctx, x, y, fontSize);
-    glyph.drawPoints(ctx, x, y, fontSize);
-    glyph.drawMetrics(ctx, x, y, fontSize);
+
+    console.log(glyph)
+    console.log(newGlyph)
+
+    newGlyph.draw(ctx, x, y, fontSize);
+    // glyph.drawPoints(ctx, x, y, fontSize);
+    // glyph.drawMetrics(ctx, x, y, fontSize);
 
 }
 
