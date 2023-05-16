@@ -11,7 +11,7 @@ var font;
 // Returns the 2d drawing context.
 function createGlyphCanvas(glyph, size) {
     const canvasId = 'c' + glyph.index;
-    const html = '<div class="wrapper" style="width:' + size + 'px"><canvas id="' + canvasId + '" width="' + size + '" height="' + size + '"></canvas><span>' + glyph.index + '</span><span>' + glyph.name + '</span><span>U ' + glyph.unicode + '</span></div>';
+    const html = '<div class="wrapper" style="width:' + size + 'px"><canvas id="' + canvasId + '" width="' + size + '" height="' + 100 + '" style="background-color: #EEEEEE"></canvas></div>';
     const glyphsDiv = document.getElementById('glyphs');
     const wrap = document.createElement('div');
     wrap.innerHTML = html;
@@ -22,14 +22,15 @@ function createGlyphCanvas(glyph, size) {
 
 var letters = "abcdefghijklmnopqrstuwxyz"
 
-const buf = await fetch('assets/Milkman.woff');
+// const buf = await fetch('assets/Milkman.woff');
+const buf = await fetch('assets/CraftworkGrotesk-SemiBold.otf')
 console.log(buf)
 
 font = opentype.parse(await buf.arrayBuffer())
 
 let pathArray = []
 
-for (let j=4; j<6; j++){
+for (let j=2; j<font.glyphs.length; j++){
     glyph = font.glyphs.get(j);
     console.log(glyph.name)
     const svgData = glyph.toSVG()
@@ -43,8 +44,6 @@ for (let j=4; j<6; j++){
 
     for (let i = 0; i < path.length; i++) {
 
-
-        
 
         if(path[i] === 'C' || path[i] === 'M' || path[i] === 'L' || path[i] === 'Q' || path[i] === '-' ||  path[i] === ' '){
 
@@ -61,15 +60,11 @@ for (let j=4; j<6; j++){
             tempStr = ''
         }else if (path[i] === 'Z'){
             subStringArr += tempStr
-            subStringArr += path[i] 
-
-            
-            
+            subStringArr += path[i]  
 
             // return the whole thing later
         } else {
             
-        
             tempStr += path[i]
 
         }
@@ -92,26 +87,24 @@ console.log(letters)
     // convert it back to the glyph
 
     var newGlyph = new opentype.Glyph({
-        name: "random" + Math.random(),
-        unicode: 66 + j,
-        advanceWidth: 100,
+        index: glyph.index,
+        name: glyph.name,
+        unicode: glyph.unicode,
+        advanceWidth: glyph.advanceWidth,
         path: newPath
     });
 
-    
-
-
-    const ctx = createGlyphCanvas(newGlyph, 150);
-    const x = 50;
-    const y = 120;
+    const ctx = createGlyphCanvas(newGlyph, 120);
+    const x = 20;
+    const y = 90;
     const fontSize = 72;
 
     console.log(glyph)
     console.log(newGlyph)
 
     newGlyph.draw(ctx, x, y, fontSize);
-    // glyph.drawPoints(ctx, x, y, fontSize);
-    // glyph.drawMetrics(ctx, x, y, fontSize);
+    // newGlyph.drawPoints(ctx, x, y, fontSize);
+    newGlyph.drawMetrics(ctx, x, y, fontSize);
 
 }
 
