@@ -1,10 +1,9 @@
-let allglyphs = []
+
 
 // first function before there are any canvases 
 function createGlyphCanvas(glyph, size) {
     const canvasId = 'c' + glyph.index;
     const canvasClass = 'glyphCanvas'
-    // const html = '<div class="wrapper" style="width:' + size + 'px"><canvas id="' + canvasId + '" width="' + size + '" height="' + 100 + '" style="background-color: #EEEEEE"></canvas></div>';
     const html = '<div class="wrapper" style="width:' + size + 'px"><canvas id="'+ canvasId + '" class="' + canvasClass + '" width="' + size + '" height="' + 100 + '" style="background-color: #EEEEEE"></canvas><span>' + glyph.name + '</span></div>';
     const glyphsDiv = document.getElementById('glyphs');
     const wrap = document.createElement('div');
@@ -19,7 +18,6 @@ function createGlyphCanvasNew(glyph, size) {
     const canvasId = 'c' + glyph.index;
     document.getElementById(canvasId).parentNode.parentNode.remove();
     const canvasClass = 'glyphCanvas'
-    // const html = '<div class="wrapper" style="width:' + size + 'px"><canvas id="' + canvasId + '" width="' + size + '" height="' + 100 + '" style="background-color: #EEEEEE"></canvas></div>';
     const html = '<div class="wrapper" style="width:' + size + 'px"><canvas id="'+ canvasId + '" class="' + canvasClass + '" width="' + size + '" height="' + 100 + '" style="background-color: #EEEEEE"></canvas><span>' + glyph.name + '</span></div>';
     const glyphsDiv = document.getElementById('glyphs');
     const wrap = document.createElement('div');
@@ -29,8 +27,9 @@ function createGlyphCanvasNew(glyph, size) {
     return canvas.getContext('2d');
 }
 
-var slider = document.getElementById("myRange")
 
+
+// -------------------------------------------
 // first function called once at the beginning
 async function main(){
 
@@ -41,8 +40,7 @@ async function main(){
 
     for (let j=0; j<font.glyphs.length; j++){
         glyph = font.glyphs.get(j);
-
-        const path = glyph.toPathData()
+        const path = glyph.toPathData();
 
         let subStringArr = []
         let tempStr =''
@@ -90,17 +88,24 @@ async function main(){
 
         newGlyph.draw(ctx, x, y, fontSize);
         // newGlyph.drawPoints(ctx, x, y, fontSize);
-        newGlyph.drawMetrics(ctx, x, y, fontSize);
+        //glyph.drawMetrics(ctx, x, y, fontSize);
 
         }
+        drawText();
 }
 
 // call first render of fonts
 main();
 
+
+// ---------------------------------------------------------------------
 // second function called on change of slider - removes the old canvases 
+var slider = document.getElementById("myRange")
+let allglyphs = []
+
 async function redoMain(){
 
+    allglyphs.length = 0;
     const buf = await fetch('assets/CraftworkGrotesk-SemiBold.otf')
     font = opentype.parse(await buf.arrayBuffer())
 
@@ -146,8 +151,6 @@ async function redoMain(){
 
         allglyphs.push(newGlyph)
 
-
-
         const ctx = createGlyphCanvasNew(newGlyph, 120);
         const x = 20;
         const y = 80;
@@ -157,16 +160,18 @@ async function redoMain(){
 
         newGlyph.draw(ctx, x, y, fontSize);
         // newGlyph.drawPoints(ctx, x, y, fontSize);
-        newGlyph.drawMetrics(ctx, x, y, fontSize);
+        // newGlyph.drawMetrics(ctx, x, y, fontSize);
 
         }
+        drawText();
 
 }
 
 // listen for change in slider and call second function
 slider.addEventListener("change", redoMain, false);
+// slider.addEventListener("change", drawText, false);
 
-
+// --------------------------------------------------------
 // compile glyphs into 1 font and download with unique name
 function downloadFont(){
     var currentDate = new Date();
@@ -185,6 +190,46 @@ function downloadFont(){
             glyphs: allglyphs
         })
 
+    console.log(randomFont);
     randomFont.download();
 
 }
+
+// typewriter
+var typewriter = document.getElementById('typewriter');
+var typectx = typewriter.getContext('2d');
+
+var gPreviewText = 'type here...'
+
+async function drawText () { 
+
+    const writeFont = new opentype.Font({
+        familyName: 'Write-generated',
+        styleName: 'Print',
+        unitsPerEm: 1000,
+        ascender: 800,
+        descender: -200,
+        glyphs: allglyphs
+    })
+
+    var c = typewriter;
+    var r = c.getBoundingClientRect();
+    c.width = r.width;
+    c.height = r.height;
+    var prectx = c.getContext('2d')
+    // prectx.save();
+    // prectx.scale(1.0, -1.0);
+    // prectx.translate(0, -c.height);
+
+    console.log(writeFont);
+    writeFont.draw(prectx, gPreviewText, 10, 150, 100, {kerning: false})
+
+
+}
+function changePreviewText(e){
+    gPreviewText = e.target.value;
+    drawText();
+}
+
+document.getElementById('preview-text').addEventListener('input', changePreviewText)
+// drawText()

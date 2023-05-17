@@ -20,25 +20,49 @@
         margin: 0.1rem;
         /* border: solid 1px black; */
       }
-      #container{
-        margin: 2rem;
+      .container{
+        display: flex;
+        flex-direction: column;
+      }
+      .typewriter canvas{
+        width: 100vw;
+        height: 200px;
+        border: solid 0.5px black;
+      }
+      .typewriter{
+        width: 100vw;
       }
 
     </style>
   </head>
 
   <body>
-
-    <button onclick="downloadFont()">download</button><br>
+    <div class="container">
+    
+    <div class="left">
+      <div class="typewriter">typewriter 
+        <input type="text" id="preview-text" value="type here...">
+        <canvas id="typewriter"></canvas>
+      </div>
 
     <div class="slidecontainer">
-      <input type="range" min="-100" max="200" value="50" class="slider" id="myRange">
+      randomise: -100<input type="range" min="-100" max="200" value="0" class="slider" id="myRange">200<br>
+      the more you randomise, the less chance the font will be entirely functional<br>
+      <button onclick="downloadFont()">download .otf file</button>
     </div>
     <br>
 
-    <div id="glyphs" style="width: 50vw;"></div>
+    <div id="glyphs"></div>
 
+    <div class="credits">font: Craftwork Grotesk Semibold</div>
+    </div>
+
+    <div class="right">
     
+
+  </div>
+
+    </div>
     <script src="fromfont.js" async></script>
   </body>
 </html>
