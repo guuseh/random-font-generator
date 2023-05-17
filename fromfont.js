@@ -13,34 +13,21 @@ function createGlyphCanvas(glyph, size) {
     return canvas.getContext('2d');
 }
 
-function removeElementsByClass(className){
-    const elements = document.getElementsByClassName(className);
-    while(elements.length > 0){
-        elements[0].parentNode.removeChild(elements[0]);
-    }
-}
-
 var slider = document.getElementById("myRange")
 var font;
 
 async function main(){
 
-// removeElementsByClass('glyphCanvas');
-
-const buf = await fetch('assets/CraftworkGrotesk-SemiBold.otf')
-font = opentype.parse(await buf.arrayBuffer())
-console.log(font);
+    const buf = await fetch('assets/CraftworkGrotesk-SemiBold.otf')
+    font = opentype.parse(await buf.arrayBuffer())
+    console.log(font);
 
     var value = slider.value;
 
     for (let j=0; j<font.glyphs.length; j++){
         glyph = font.glyphs.get(j);
-        // console.log(glyph.name)
-        //const svgData = glyph.toSVG()
-        // console.log(svgData)
-        const path = glyph.toPathData()
 
-        // console.log("original",path)
+        const path = glyph.toPathData()
 
         let subStringArr = []
         let tempStr =''
@@ -83,14 +70,10 @@ console.log(font);
         const fontSize = 72;
         
         ctx.clearRect(0,0,120,120);
-        //newGlyph.parentNode.removeChild(newGlyph);
 
         newGlyph.draw(ctx, x, y, fontSize);
         // newGlyph.drawPoints(ctx, x, y, fontSize);
         newGlyph.drawMetrics(ctx, x, y, fontSize);
-
-        // slider.addEventListener("change", function (){ newGlyph.draw (ctx, x, y, fontSize); console.log('a'); }, false)
-
 
         }
 }
@@ -98,8 +81,6 @@ console.log(font);
 main();
 
 slider.addEventListener("change", main, false);
-
-// slider.addEventListener("change", removeElementsByClass("glyphCanvas"), false)
 
 function downloadFont(){
     var currentDate = new Date();
