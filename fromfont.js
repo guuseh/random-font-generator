@@ -222,13 +222,21 @@ async function drawText () {
     // prectx.translate(0, -c.height);
 
     console.log(writeFont);
-    writeFont.draw(prectx, gPreviewText, 10, 150, 100, {kerning: false})
-
+    writeFont.draw(prectx, gPreviewText, 10, 140, 150, {kerning: false})
 
 }
 function changePreviewText(e){
     gPreviewText = e.target.value;
     drawText();
+}
+
+function printText(){
+    var textCanvas = document.getElementById("typewriter");
+    var url = textCanvas.toDataURL();
+    printJS({printable:'typewriter', type:'html', maxWidth: 4000});
+    // var win = window.open();
+    // win.document.write("<img src='" + url + "' style='border: 1px solid black'/>");
+    // win.setTimeout(() => win.print(), 0);
 }
 
 document.getElementById('preview-text').addEventListener('input', changePreviewText)
