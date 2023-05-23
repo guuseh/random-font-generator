@@ -13,50 +13,262 @@
 
 
     <style>
-      div{
-        display: inline-block;
-        margin: 0.1rem;
-        /* border: solid 1px black; */
+      @font-face {
+        font-family: craftworkbold;
+        src: url('assets/CraftworkGrotesk-SemiBold.otf');
+      }
+      @font-face {
+        font-family: craftworkreg;
+        src: url('assets/CraftworkGrotesk-Regular.otf');
+      }
+      body{
+        margin: 2rem;
+        font-family: 'craftworkreg';
+        background-color: #F4F5FF;
       }
       .container{
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 250px auto;
+        grid-template-rows: 25mm 25mm min-content auto;
+        grid-template-areas:
+              "title description"
+              "typewriter typewriter"
+              ". textinput"
+              "fontinput glyphs" ;
+        gap: 1rem 1rem;
       }
-      .typewriter canvas{
-        width: 100vw;
-        height: 175px;
-        border: solid 0.5px black;
+
+      #title{
+        /* border: solid 1px black; */
+        grid-area: title;
+      }
+      h1{
+        margin: 0;
+        font-family: 'craftworkbold';
+        font-size: 2.4rem;
+        font-weight: normal;
+      }
+      #desc{
+        grid-area: description;
       }
       .typewriter{
-        width: 100vw;
+        grid-area: typewriter;
+        /* border: solid 0.5px black; */
+        display: flex;
+        align-items: center;
+        background-color: white;
+        box-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+        border-left: 2px dashed black;
+        border-right: 2px dashed black;
       }
+      .typewriter canvas{
+        width: 100%;
+        height: 20mm;
+        /* border: solid 0.5px black; */
+      }
+      .textinput{
+        grid-area: textinput;
+        display: grid;
+        grid-template-columns: max-content auto max-content;
+        gap: 1rem 1rem;
+        align-items: center;
+        /* border: solid 1px black; */
+      }
+      h3{
+        margin: 0;
+        padding: 0;
+        font-family: 'craftworkbold';
+        font-size: 1.3rem;
+        font-weight: normal;
+      }
+      #preview-text{
+        font-family: 'craftworkreg';
+        font-size: 1.3rem;
+        border-radius: 10px;
+        padding-left: 0.5rem;
+      }
+      #print-button{
+        border-radius: 10px;
+        font-family: 'craftworkreg';
+        font-size: 1.2rem;
+        background-color: #0000FF;
+        color: white;
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      .slidecontainer{
+        grid-area: fontinput;
+      }
+      input[type="range"]{
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 30px;
+        border-radius: 15px;
+        background: transparent;
+      }
+      input[type="range"]::-webkit-slider-thumb{
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background-color: #0000FF;
+        border-radius: 10px;
+        box-shadow: 
+                inset .8em .8em 5px -8px rgba(255, 255, 255, .4),
+                inset -.4em -.4em 10px -3px rgba(0,0,0,.2),
+                0.3em 0.3em 4px -0.5em rgba(0,0,0,.7);;
+        cursor: pointer;
+      }
+      input[type="range"]::-moz-range-thumb{
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background-color: #0000FF;
+        border-radius: 10px;
+        box-shadow: 
+                inset .8em .8em 5px -8px rgba(255, 255, 255, .4),
+                inset -.4em -.4em 10px -3px rgba(0,0,0,.2),
+                0.3em 0.3em 4px -0.5em rgba(0,0,0,.7);;
+        cursor: pointer;
+      }
+      input[type="range"]::-webkit-slider-runnable-track{
+        background: #E3E8FF;
+        width: 100%;
+        height: 30px;
+        border-radius: 15px;
+        padding: 5px;
+        box-shadow: 
+                inset .3em 0.3em 5px rgba(0,0,0,.15);
+      }
+      input[type="range"]::-moz-range-track{
+        background: #E3E8FF;
+        width: 100%;
+        height: 30px;
+        border-radius: 15px;
+        padding: 5px;
+        box-shadow: 
+                inset .5em 0.5em 5px rgba(0,0,0,.15);
+      }
+      
+      #inputfontbutton{
+        width: 100%;
+        border-radius: 10px;
+        font-family: 'craftworkreg';
+        font-size: 1.2rem;
+        background-color: #0000FF;
+        color: white;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin-top: 0.5rem;
+      }
+      #uploadedfile{
+        font-size: 0.8rem;
+      }
+      #removeButton{
+        width: 100%;
+        border-radius: 10px;
+        font-family: 'craftworkreg';
+        font-size: 1.2rem;
+        background-color: #0000FF;
+        color: white;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin-top: 0.5rem;
+      }
+      #downloadfont{
+        width: 100%;
+        border-radius: 10px;
+        font-family: 'craftworkreg';
+        font-size: 1.2rem;
+        background-color: #0000FF;
+        color: white;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin-top: 0.5rem;
+      }
+      #glyphs{
+        grid-area: glyphs;
+      }
+      #glyphs div{
+        display: inline-block;
+        margin: 0.3rem;
+        background-color: #E3E8FF;
+        
+        /* border: solid 1px black; */
+      }
+      .glyphwrap{
+        border-bottom: 2px solid #0000FF
+      }
+
+      .button{
+        appearance: none;
+        background-color: #0000FF;
+        border-radius: 10px;
+        border-width: 0;
+        box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#04048a 0 -3px 0 inset;
+        box-sizing: border-box;
+        color: white;
+        cursor: pointer;
+        font-family: 'craftworkreg';
+        /* justify-content: center; */
+        /* align-items: center; */
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        font-size: 1.1rem;
+        padding: 0.3rem;
+        padding-bottom: 0.5rem;
+      }
+   
+      /* @media print and (width: 8cm) and (height: 30cm){
+        @page{
+          margin: 0.5in;
+        }
+      } */
 
     </style>
   </head>
 
   <body>
     <div class="container">
+
+
+    <h1 id="title">(ODDITY)PE<br>ODDI(TYPE)</h1>
+    <div id="desc">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Possimus nisi non adipisci quisquam reiciendis, incidunt modi enim est, aperiam vero sint tempora. Consequatur officiis, quo temporibus distinctio architecto molestiae numquam.</div>
+
     
-    <div class="left">
-      <div class="typewriter">typewriter 
-        <input type="text" id="preview-text" value="type here...">
-        <button onclick="printText()">print</button>
-        <canvas id="typewriter"></canvas>
-      </div>
+    <div class="typewriter">
+      <canvas id="typewriter"></canvas>
+    </div>
+
+    <div class="textinput">
+       <h3>Type your message:</h3>
+       <input type="text" id="preview-text" placeholder="type here...">
+       <button onclick="printText()" id="print-button" class="button">print your message</button>
+     </div>
 
     <div class="slidecontainer">
-      randomise: -100<input type="range" min="-100" max="200" value="0" class="slider" id="myRange">200<br>
-      the more you randomise, the less chance the font will be entirely functional<br>
-      <button onclick="downloadFont()">download .otf file</button>
-    </div>
+      <h3>Randomise:</h3>
+      <input type="range" min="-100" max="200" value="0" class="slider" id="myRange"><br>
+      The more you randomise, the less chance a fully functional font can be downloaded<br>
+      <br>
+      <div id="fontCredit"></div>
+      <br>
+      <input type="file" id="inputFont" style="display:none"/>
+      <button id="inputfontbutton" class="button">upload font</button>
+      <div id="uploadedfile"></div>
+      <button onclick="removeFont()" id="removeButton" class="button">remove upload</button>
+      <button onclick="downloadFont()" id="downloadfont" class="button">download generated font as .otf</button>
+    </div><br>
+    
     <br>
 
     <div id="glyphs"></div>
+  
 
-    <div class="credits">font: Craftwork Grotesk Semibold</div>
-    </div>
 
-    <div class="right">
     
 
   </div>
