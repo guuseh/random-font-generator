@@ -117,7 +117,7 @@ async function main(){
         //glyph.drawMetrics(ctx, x, y, fontSize);
 
         }
-        drawText();
+        drawText(arrayId);
 }
 
 // call first render of fonts
@@ -147,7 +147,9 @@ async function redoMain(){
     // const buf = await fetch('assets/CraftworkGrotesk-SemiBold.otf')
     if (fontInput.length > 0){
          font = opentype.parse(await fontFile.arrayBuffer())
-         credit.innerHTML = "<h3>Current font:</h3> " + fontFile.name;
+         if(font.names.macintosh.fontFamily["en"] && font.names.macintosh.fontSubfamily["en"]){
+         credit.innerHTML = "<h3>Current font:</h3> " + font.names.macintosh.fontFamily["en"] + " " + font.names.macintosh.fontSubfamily["en"]; }
+         else{ credit.innerHTML = "<h3>Current font:</h3> " + fontFile.name }
          upload.innerHTML = "File: " + fontFile.name
     } else{
          const buf = await fetch('assets/CraftworkGrotesk-SemiBold.otf')
@@ -186,7 +188,8 @@ async function redoMain(){
             }
         }
             
-        const newPath = opentype.Path.fromSVG(subStringArr)
+        // const newPath = opentype.Path.fromSVG(subStringArr)
+        const newPath = new opentype.Path.fromSVG(subStringArr);
 
         var newGlyph = new opentype.Glyph({
             index: glyph.index,
@@ -196,12 +199,15 @@ async function redoMain(){
             path: newPath
         });
 
+        // console.log(newGlyph.getPath())
+
         allglyphs.push(newGlyph)
         // try {
         const ctx = createGlyphCanvasNew(newGlyph, 120);
         const x = 20;
         const y = 80;
         const fontSize = 72;
+
         
         ctx.clearRect(0,0,120,120);
   
@@ -209,7 +215,7 @@ async function redoMain(){
  
         }
 
-        drawText()
+        drawText(arrayId)
 }
 
 // listen for change in slider and call second function
@@ -266,8 +272,9 @@ var textArray = ["The quick brown fox jumps over the lazy dog",
 var arrayId = Math.round(Math.random()*(textArray.length-1));
 
 var gPreviewText = textArray[arrayId]
+var printpath;
 
-async function drawText () { 
+async function drawText (ai) { 
 
     const writeFont = new opentype.Font({
         familyName: 'Write-generated',
@@ -286,24 +293,35 @@ async function drawText () {
     var prectx = c.getContext('2d');
     prectx.scale(scale, scale);
     
-    writeFont.draw(prectx, gPreviewText, 10, 50, 50, {kerning: false}); 
+    writeFont.draw(prectx, gPreviewText, 10, 50, 40, {kerning: false}); 
+
+    printpath = writeFont.getPath(gPreviewText, 10, 50, 40, {kerning: false});
+    pathdata = printpath.toPathData({optimize: true, flipY: false})
+    // console.log(pathdata);
 }
 window.onresize = drawText;
 
+
 async function changePreviewText(e){
     gPreviewText = e.target.value;
+    if(e.target.value < 1){ gPreviewText = textArray[Math.round(Math.random()*(textArray.length-1))]}
     drawText();
 }
 
 function printText(){
-    var textCanvas = document.getElementById("typewriter");
-    var url = textCanvas.toDataURL();
+
+    svg = printpath.toSVG({flipY: false});
+    // console.log(svg);
+
+    // var textCanvas = document.getElementById("typewriter");
+    // var url = textCanvas.toDataURL();
 
     var windowContent = '<!DOCTYPE html>';
     windowContent += '<html>'
     windowContent += '<head><title>Print canvas</title></head>';
-    windowContent += '<body style="margin: 0">'
-    windowContent += '<img src="' + url + '" style="transform-origin: bottom left; transform: rotate(90deg) translate(-50px, 0) scale(4)">';
+    windowContent += '<body style="margin: 0;">'
+    windowContent += '<svg width="1000" height="200" style="transform-origin: bottom left; transform: rotate(90.000001deg) translate(-230px, 625px) scale(5);">' + svg + '</svg>'
+    // windowContent += '<img src="' + url + '" style="transform-origin: bottom left; transform: rotate(90.000001deg) translate(-80px, 0) scale(2.5); image-rendering: pixelated">';
     windowContent += '</body>';
     windowContent += '</html>';
     var printWin = window.open('','','width=300,height=auto');
@@ -312,7 +330,7 @@ function printText(){
     printWin.document.close();
     printWin.focus();
     printWin.print();
-    //printWin.close();
+    setTimeout(() => { printWin.close(); }, 10);
     //printJS({printable:'typewriter', type:'html', maxWidth: 4000});
 
 }

@@ -4,9 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>! fromfont</title>
+    <title>ODDITYPE</title>
 
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="shortcut icon" type="image/png" href="assets/fav.png">
 
     <script src="libraries/print.min.js"></script>
     <script src="libraries/opentype.js"></script>
@@ -51,6 +52,7 @@
       }
       #desc{
         grid-area: description;
+        font-size: 1.2rem;;
       }
       .typewriter{
         grid-area: typewriter;
@@ -66,6 +68,9 @@
         width: 100%;
         height: 20mm;
         /* border: solid 0.5px black; */
+      }
+      .next{
+        grid-area: next;
       }
       .textinput{
         grid-area: textinput;
@@ -241,12 +246,17 @@
 
     
     <h1 id="title">(ODDITY)PE<br>ODDI(TYPE)</h1>
-    <div id="desc">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Possimus nisi non adipisci quisquam reiciendis, incidunt modi enim est, aperiam vero sint tempora. Consequatur officiis, quo temporibus distinctio architecto molestiae numquam.</div>
+    <div id="desc">odditype is a web application that functions to add some oddity to your types. 
+                   You can upload your own (.otf) font or use the default <i>Craftwork Grotesk</i> font by Ivan Tsanko of craftwork.design. 
+                   See your new typeface in action and print your personalised message or one of the ten rotating pangrams. 
+                   Download your newly generated odd type as an .otf file and use it anywhere you can imagine.</div>
 
     
     <div class="typewriter">
       <canvas id="typewriter" width="800" height="200"></canvas>
     </div>
+
+   
 
     <div class="textinput">
        <h3>Type your message:</h3>
@@ -257,7 +267,7 @@
     <div class="slidecontainer">
       <h3>Randomise:</h3>
       <input type="range" min="-100" max="200" value="0" class="slider" id="myRange"><br>
-      The more you randomise, the less chance a fully functional font can be downloaded<br>
+      the more you randomise, the less chance a fully functional font can be downloaded<br>
       <br>
       <div id="fontCredit"></div>
       <br>
