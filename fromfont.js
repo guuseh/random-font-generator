@@ -4,14 +4,21 @@
 function createGlyphCanvas(glyph, size) {
     const canvasId = 'c' + glyph.index;
     const canvasClass = 'glyphCanvas'
-    const html = '<div class="wrapper" style="width:' + size + 'px"><canvas id="'+ canvasId + '" class="' + canvasClass + '" width="' + size + '" height="' + 100 + '"></canvas></div>';
+    const html = '<div class="wrapper" style="width:' + size + 'px"><canvas id="'+ canvasId + '" class="' + canvasClass + '" ></canvas></div>';
     const glyphsDiv = document.getElementById('glyphs');
     const wrap = document.createElement('div');
     wrap.classList.add('glyphwrap')
     wrap.innerHTML = html;
     glyphsDiv.appendChild(wrap);
     const canvas = document.getElementById(canvasId);
-    return canvas.getContext('2d');
+    canvas.style.width = size + "px";
+    canvas.style.height = 100 + "px";
+    var ctx = canvas.getContext('2d');
+    var scale = window.devicePixelRatio;
+    canvas.width = size * scale;
+    canvas.height = 100 * scale;
+    ctx.scale(scale,scale);
+    return ctx;
 }
 
 // function to call after canvases are already made to delete previous canvases
@@ -20,14 +27,21 @@ function createGlyphCanvasNew(glyph, size) {
     if(document.getElementById(canvasId)){
         document.getElementById(canvasId).parentNode.parentNode.remove(); }
     const canvasClass = 'glyphCanvas'
-    const html = '<div class="wrapper" style="width:' + size + 'px"><canvas id="'+ canvasId + '" class="' + canvasClass + '" width="' + size + '" height="' + 100 + '"></canvas></div>';
+    const html = '<div class="wrapper" style="width:' + size + 'px"><canvas id="'+ canvasId + '" class="' + canvasClass + '" ></canvas></div>';
     const glyphsDiv = document.getElementById('glyphs');
     const wrap = document.createElement('div');
     wrap.classList.add('glyphwrap')
     wrap.innerHTML = html;
     glyphsDiv.appendChild(wrap);
     const canvas = document.getElementById(canvasId);
-    return canvas.getContext('2d');
+    canvas.style.width = size + "px";
+    canvas.style.height = 100 + "px";
+    var ctx = canvas.getContext('2d');
+    var scale = window.devicePixelRatio;
+    canvas.width = size * scale;
+    canvas.height = 100 * scale;
+    ctx.scale(scale,scale);
+    return ctx;
 }
 
 document.getElementById("inputfontbutton").addEventListener('click', () => {
@@ -266,10 +280,11 @@ async function drawText () {
 
     var c = typewriter;
     var r = c.getBoundingClientRect();
-    c.width = r.width;
-    c.height = r.height;
-    var prectx = c.getContext('2d')
-
+    var scale = window.devicePixelRatio;
+    c.width = r.width * scale;
+    c.height = r.height * scale;
+    var prectx = c.getContext('2d');
+    prectx.scale(scale, scale);
     
     writeFont.draw(prectx, gPreviewText, 10, 50, 50, {kerning: false}); 
 }
