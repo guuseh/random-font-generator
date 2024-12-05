@@ -190,6 +190,8 @@ async function redoMain(){
             
         // const newPath = opentype.Path.fromSVG(subStringArr)
         const newPath = new opentype.Path.fromSVG(subStringArr);
+        // newPath.strokeWidth = 20;
+        // console.log(newPath)
 
         var newGlyph = new opentype.Glyph({
             index: glyph.index,
@@ -330,9 +332,30 @@ function printText(){
     printWin.document.close();
     printWin.focus();
     printWin.print();
-    setTimeout(() => { printWin.close(); }, 10);
+    // setTimeout(() => { printWin.close(); }, 10);
     //printJS({printable:'typewriter', type:'html', maxWidth: 4000});
 
+}
+
+function saveText(){
+    var canvas = document.getElementById("typewriter");
+    var img = canvas.toDataURL("image/png");
+    var downloadLink = document.createElement("a");
+    downloadLink.href = img;
+    downloadLink.download = "mymessage_odditype.png";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    
+    // var windowContent = '<!DOCTYPE html>';
+    // windowContent += '<html>'
+    // windowContent += '<head><title>Print canvas</title></head>';
+    // windowContent += '<body style="margin: 0;">'
+    // windowContent += '<img src="' + img + '"/>'
+    // // windowContent += '<img src="' + url + '" style="transform-origin: bottom left; transform: rotate(90.000001deg) translate(-80px, 0) scale(2.5); image-rendering: pixelated">';
+    // windowContent += '</body>';
+    // windowContent += '</html>';
+    
 }
 
 document.getElementById('preview-text').addEventListener('input', changePreviewText)

@@ -28,6 +28,16 @@
         background-color: #F4F5FF;
         /* overflow:hidden; */
       }
+      a{
+        color:#0000FF;
+        text-decoration: none;
+      }
+      a:hover{
+        filter:drop-shadow(0.1px 0.1px 1px #0000FF)
+      }
+      a:visited{
+        color:#0000FF;
+      }
       .container{
         display: grid;
         grid-template-columns: 250px auto;
@@ -75,7 +85,7 @@
       .textinput{
         grid-area: textinput;
         display: grid;
-        grid-template-columns: max-content auto max-content;
+        grid-template-columns: max-content auto max-content max-content;
         gap: 1rem 1rem;
         align-items: center;
         /* border: solid 1px black; */
@@ -101,6 +111,18 @@
         color: white;
         padding-left: 1rem;
         padding-right: 1rem;
+        display: inline-block;
+      }
+      #save-button{
+        border-radius: 10px;
+        font-family: 'craftworkreg';
+        font-size: 1.2rem;
+        background-color: #0000FF;
+        color: white;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        width: min-content;
+        display: inline-block;
       }
       .slidecontainer{
         grid-area: fontinput;
@@ -261,7 +283,8 @@
     <div class="textinput">
        <h3>Type your message:</h3>
        <input type="text" id="preview-text" placeholder="type here...">
-       <button onclick="printText()" id="print-button" class="button">print your message</button>
+       <button onclick="printText()" id="print-button" class="button">print message</button>
+       <button onclick="saveText()" id="save-button" class="button">save</button>
      </div>
 
     <div class="slidecontainer">
@@ -278,6 +301,12 @@
 
       <button onclick="removeFont()" id="removeButton" class="button">remove upload</button>
       <button onclick="downloadFont()" id="downloadfont" class="button">download generated font as .otf</button>
+      <br><br>
+      <h3>Contact</h3>
+      Guus Hoeberechts<br>
+      (<a href="https://guushoeberechts.nl" target="_blank">website</a>)
+      (<a href="mailto:guus-99@live.nl">email</a>) 
+      (<a href="https://www.instagram.com/guus.eh/" target="_blank">instagram</a>)
     </div>
 
     <div class="glyphs">
